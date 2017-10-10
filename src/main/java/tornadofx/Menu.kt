@@ -141,7 +141,7 @@ fun Menu.menuitem(name: String, keyCombination: KeyCombination? = null, graphic:
 }
 
 /**
- * Create a MenuItem. The op block operates on the MenuItem where you can call `setOnAction` to provide the menu item action.
+ * Create a MenuItem. The op block operates on the MenuItem where you can call `action` to provide the menu item action.
  * Notice that this differs from the deprecated `menuitem` builder where the op
  * is configured as the `setOnAction` directly.
  */
@@ -154,6 +154,44 @@ fun Menu.item(name: String, keyCombination: KeyCombination? = null, graphic: Nod
     return menuItem
 }
 
+/**
+ * Create a CustomMenuItem. You must provide a builder inside the `CustomMenuItem` or assign to the `content` property
+ * of the item. The item action is configured with the `action` builder.
+ */
+fun Menu.customitem(keyCombination: KeyCombination? = null, hideOnClick: Boolean = true, op: (CustomMenuItem.() -> Unit)? = null): CustomMenuItem {
+    val menuItem = CustomMenuItem()
+    menuItem.isHideOnClick = hideOnClick
+    keyCombination?.also { menuItem.accelerator = it }
+    op?.invoke(menuItem)
+    this += menuItem
+    return menuItem
+}
+
+/**
+ * Create a CustomMenuItem. You must provide a builder inside the `CustomMenuItem` or assign to the `content` property
+ * of the item. The item action is configured with the `action` builder.
+ */
+fun MenuButton.customitem(keyCombination: KeyCombination? = null, hideOnClick: Boolean = true, op: (CustomMenuItem.() -> Unit)? = null): CustomMenuItem {
+    val menuItem = CustomMenuItem()
+    menuItem.isHideOnClick = hideOnClick
+    keyCombination?.also { menuItem.accelerator = it }
+    op?.invoke(menuItem)
+    items.add(menuItem)
+    return menuItem
+}
+
+/**
+ * Create a CustomMenuItem. You must provide a builder inside the `CustomMenuItem` or assign to the `content` property
+ * of the item. The item action is configured with the `action` builder.
+ */
+fun ContextMenu.customitem(keyCombination: KeyCombination? = null, hideOnClick: Boolean = true, op: (CustomMenuItem.() -> Unit)? = null): CustomMenuItem {
+    val menuItem = CustomMenuItem()
+    menuItem.isHideOnClick = hideOnClick
+    keyCombination?.also { menuItem.accelerator = it }
+    op?.invoke(menuItem)
+    this += menuItem
+    return menuItem
+}
 fun MenuButton.item(name: String, keyCombination: KeyCombination? = null, graphic: Node? = null, op: (MenuItem.() -> Unit)? = null): MenuItem {
     val menuItem = MenuItem(name, graphic)
     keyCombination?.apply { menuItem.accelerator = this }
